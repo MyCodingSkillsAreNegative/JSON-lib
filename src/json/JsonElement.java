@@ -2,6 +2,11 @@ package json;
 
 import java.util.ArrayList;
 
+/*
+ * On GitHub
+ * @author MyCodingSkillsAreNegative
+ */
+
 public class JsonElement {
 	//The name of a element without a name
 	public static final String ELEMENT_ANONYMOUS = "ELEMENT_NO_NAME_INA:hn2Z19491001S19221230";

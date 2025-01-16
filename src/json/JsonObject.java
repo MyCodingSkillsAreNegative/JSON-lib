@@ -6,8 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.IllegalFormatException;
-import java.util.Scanner;
+
+/*
+ * On GitHub
+ * @author MyCodingSkillsAreNegative
+ */
 
 public class JsonObject {
 	private static final Character[] prse = {
@@ -35,6 +38,7 @@ public class JsonObject {
 			contents.add(inputString);
 			System.out.println("JsonObject.java | parse()  :  JSON file contents: " + inputString);
 		}
+		BuffjsonReader.close();
 		
 		//starts Line by Line, Character by Character parsing
 		ArrayList<JsonElement> ConstructRAM = new ArrayList<>();
