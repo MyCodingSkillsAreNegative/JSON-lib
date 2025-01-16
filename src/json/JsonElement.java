@@ -3,14 +3,18 @@ package json;
 import java.util.ArrayList;
 
 public class JsonElement {
+	//The name of a element without a name
+	public static final String ELEMENT_ANONYMOUS = "ELEMENT_NO_NAME_INA:hn2Z19491001S19221230";
 	//Data type enums
 	enum type {
 		Str,
-		Int,
+		Num,
 		Sec,
-		ArrInt,
+		Bool,
+		ArrNum,
 		ArrStr,
-		ArrArr
+		ArrJsE,
+		ArrBool
 	}
 	//Element type
 	type ElementType;
@@ -18,9 +22,11 @@ public class JsonElement {
 	public String Name;
 	//Values
 	String strValue;
-	int intValue;
+	float numValue;
+	boolean boolValue;
 	ArrayList<JsonElement> secValue = new ArrayList<JsonElement>(); //also for ArrArr
-	ArrayList<Integer> arrIntValue = new ArrayList<>();
+	ArrayList<Boolean> arrBoolValue = new ArrayList<>();
+	ArrayList<Float> arrNumValue = new ArrayList<>();
 	ArrayList<String> arrStrValue = new ArrayList<>();
 	public JsonElement(String name, String val) {
 		Name = name;
@@ -29,27 +35,40 @@ public class JsonElement {
 	}
 	public JsonElement(String name, int val) {
 		Name = name;
-		intValue = val;
-		ElementType = type.Int;
+		numValue = val;
+		ElementType = type.Num;
+	}
+	public JsonElement(String name, boolean val) {
+		Name = name;
+		boolValue = val;
+		ElementType = type.Bool;
 	}
 	public JsonElement(String name, type ELEMENT_TYPE) {
 		Name = name;
 		ElementType = ELEMENT_TYPE;
 	}
+	public JsonElement(type VALUE) {
+		Name = ELEMENT_ANONYMOUS;
+		ElementType = VALUE;
+	}
 	public Object getValue() {
 		switch (this.ElementType) {
 		case Str :
 			return strValue;
-		case Int :
-			return intValue;
+		case Num :
+			return numValue;
 		case Sec :
 			return secValue;
-		case ArrInt :
-			return arrIntValue;
+		case Bool :
+			return boolValue;
+		case ArrNum :
+			return arrNumValue;
 		case ArrStr :
 			return arrStrValue;
-		case ArrArr :
+		case ArrJsE :
 			return secValue;
+		case ArrBool :
+			return arrBoolValue;
 		default : 
 			return "ERROR: UNCONFINED ENUM VALUE";
 		}

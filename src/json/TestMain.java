@@ -1,15 +1,16 @@
 package json;
 
-import java.io.FileNotFoundException;
-
 public class TestMain {
 	public static void main(String[] args) {
-		JsonObject json = new JsonObject("src\\json\\Test.json");
+		JsonObject FOR_json = new JsonObject("src\\json\\Test.Formatted.json");
+		JsonObject UNF_json = new JsonObject("src\\json\\Test.Unformatted.json");
 		try {
-			json.parse();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			//FOR_json.parse();
+			UNF_json.parse();
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(Character.isDigit('.'));
 	}
 }

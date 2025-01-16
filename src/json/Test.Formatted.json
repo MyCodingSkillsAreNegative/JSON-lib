@@ -1,7 +1,11 @@
 {
-	"Integer":3,
+	"SingleDigitInteger" : 3,
+	"DoubleDigitInteger" : 12,
 	"String":"String1",
 	"Float":0.2,
+	"DoubleDigitFloat": 19.2,
+	"BooleanT": true,
+	"BooleanF": false,
 	"String Section":{
 		"String1",
 		"String2"
@@ -18,7 +22,6 @@
 		[9,0,5]
 	],
 	"Backslash escape":{
-		"Double Quotation":"\"",
-		"Single Quotation": "\'",
+		"Double Quotation":"\""
 	}
 }
