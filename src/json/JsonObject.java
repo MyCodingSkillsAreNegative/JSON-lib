@@ -53,15 +53,21 @@ public class JsonObject {
 				if (character == '\"') { //Checks for String construction
 					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
 				}
+				character = line.charAt(CharIndex);
 				
 				if (Character.isDigit(character)) {
 					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
 				}
+				character = line.charAt(CharIndex);
+				
 				if (character == 't' || character == 'f') {
 					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
 				}
+				character = line.charAt(CharIndex);
+				
 				if (character == ',' ) { //Checks for ',' ending
-					System.out.println(construct(ConstructRAM, line, CharIndex).getTagValue());
+					System.out.println("JsonObject.java | parse()  :  Constructed JsonElement Object: " + construct(ConstructRAM, line, CharIndex).getTagValue());
+					ConstructRAM.clear();
 				}
 			}
 		}
