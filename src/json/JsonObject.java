@@ -53,20 +53,22 @@ public class JsonObject {
 				if (character == '\"') { //Checks for String construction
 					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
 				}
-				if (character == ',' ) { //Checks for ',' ending
-					construct(ConstructRAM, line, CharIndex);
-				}
+				
 				if (Character.isDigit(character)) {
 					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
 				}
 				if (character == 't' || character == 'f') {
 					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
 				}
+				if (character == ',' ) { //Checks for ',' ending
+					System.out.println(construct(ConstructRAM, line, CharIndex).getTagValue());
+				}
 			}
 		}
 	}
 	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) {
-		for (int backTrack = 1; backTrack < CharIndex; backTrack++) {
+		System.out.println("JsonObject.java | (hidden) construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex)  :  Constructing Object From RAM");
+		for (int backTrack = 0; backTrack < CharIndex; backTrack++) {
 			if (Character.isWhitespace(line.charAt(CharIndex - backTrack)) == false) {
 				switch (line.charAt(CharIndex - backTrack)) {
 				case ']':
@@ -76,8 +78,38 @@ public class JsonObject {
 					//Section Code
 					break;
 				default:
-					
-					
+					//is either String, number, or boolean
+					switch (ConstructInfo.get(ConstructInfo.size() - 1).ElementType) {
+					case Str :
+						if (ConstructInfo.size() != 1 ) {
+							JsonElement strl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).strValue);
+							return strl;
+						} else {
+							JsonElement strl = new JsonElement(JsonElement.type.Str);
+							strl.strValue = ConstructInfo.get(0).strValue;
+							return strl;
+						}
+					case Num :
+						if (ConstructInfo.size() != 1 ) {
+							JsonElement numl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).numValue);
+							return numl;
+						} else {
+							JsonElement numl = new JsonElement(JsonElement.type.Num);
+							numl.numValue = ConstructInfo.get(0).numValue;
+							return numl;
+						}
+					case Bool :
+						if (ConstructInfo.size() != 1 ) {
+							JsonElement bool = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).boolValue);
+							return bool;
+						} else {
+							JsonElement bool = new JsonElement(JsonElement.type.Bool);
+							bool.boolValue = ConstructInfo.get(0).boolValue;
+							return bool;
+						}
+					default:
+						System.out.println("CHAR_TYPE_OUT_OF_REACH");
+					}
 				}
 			}
 		}
