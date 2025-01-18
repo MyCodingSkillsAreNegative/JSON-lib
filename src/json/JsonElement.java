@@ -2,15 +2,24 @@ package json;
 
 import java.util.ArrayList;
 
+/*
+ * On GitHub
+ * @author MyCodingSkillsAreNegative
+ */
+
 public class JsonElement {
+	//The name of a element without a name
+	public static final String ELEMENT_ANONYMOUS = "ELEMENT_NO_NAME_INA:hn2Z19491001S19221230";
 	//Data type enums
 	enum type {
 		Str,
-		Int,
+		Num,
 		Sec,
-		ArrInt,
+		Bool,
+		ArrNum,
 		ArrStr,
-		ArrArr
+		ArrJsE,
+		ArrBool
 	}
 	//Element type
 	type ElementType;
@@ -18,40 +27,87 @@ public class JsonElement {
 	public String Name;
 	//Values
 	String strValue;
-	int intValue;
+	float numValue;
+	boolean boolValue;
 	ArrayList<JsonElement> secValue = new ArrayList<JsonElement>(); //also for ArrArr
-	ArrayList<Integer> arrIntValue = new ArrayList<>();
+	ArrayList<Boolean> arrBoolValue = new ArrayList<>();
+	ArrayList<Float> arrNumValue = new ArrayList<>();
 	ArrayList<String> arrStrValue = new ArrayList<>();
 	public JsonElement(String name, String val) {
 		Name = name;
 		strValue = val;
 		ElementType = type.Str;
 	}
-	public JsonElement(String name, int val) {
+	public JsonElement(String name, float val) {
 		Name = name;
-		intValue = val;
-		ElementType = type.Int;
+		numValue = val;
+		ElementType = type.Num;
+	}
+	public JsonElement(String name, boolean val) {
+		Name = name;
+		boolValue = val;
+		ElementType = type.Bool;
 	}
 	public JsonElement(String name, type ELEMENT_TYPE) {
 		Name = name;
 		ElementType = ELEMENT_TYPE;
 	}
+	public JsonElement(type VALUE) {
+		Name = ELEMENT_ANONYMOUS;
+		ElementType = VALUE;
+	}
 	public Object getValue() {
 		switch (this.ElementType) {
 		case Str :
 			return strValue;
-		case Int :
-			return intValue;
+		case Num :
+			return numValue;
 		case Sec :
 			return secValue;
-		case ArrInt :
-			return arrIntValue;
+		case Bool :
+			return boolValue;
+		case ArrNum :
+			return arrNumValue;
 		case ArrStr :
 			return arrStrValue;
-		case ArrArr :
+		case ArrJsE :
 			return secValue;
+		case ArrBool :
+			return arrBoolValue;
 		default : 
 			return "ERROR: UNCONFINED ENUM VALUE";
+		}
+	}
+	private boolean checkAnonymous() {
+		if (this.Name == ELEMENT_ANONYMOUS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public String getTagValue() {
+		switch (this.ElementType) {
+		case Str:
+			if (this.checkAnonymous()) {
+				return "\"" + this.strValue + "\"";
+			}
+			String strtag = "\"" + this.Name + "\":\"" + this.strValue + "\"";
+			return strtag;
+		case Num:
+			if (this.checkAnonymous()) {
+				return "\"" + this.numValue + "\"";
+			}
+			String numtag = "\"" + this.Name + "\":\"" + this.numValue + "\"";
+			return numtag;
+		case Bool:
+			if (this.checkAnonymous()) {
+				return "\"" + this.boolValue + "\"";
+			}
+			String booltag = "\"" + this.Name + "\":\"" + this.boolValue + "\"";
+			return booltag;
+		default:
+			System.out.println("JsonElement.java | getTagValue()  :  This is only a testing function as of now. Doesn't support container elements");
+			return "A";
 		}
 	}
 }
