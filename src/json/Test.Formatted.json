@@ -16,7 +16,7 @@
 	},
 	"Integer Array":[2,3,5],
 	"String Array":["one", "two"],
-	"FLoat Array":[2.4, 7.9,9.00],
+	"Float Array":[2.4, 7.9,9.00],
 	"Multi-Dimensional Array" : [
 		[1,4,5],
 		[9,0,5]

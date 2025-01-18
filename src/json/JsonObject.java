@@ -30,26 +30,31 @@ public class JsonObject {
 	}
 	public void parse() throws IOException {
 		//retrieving parsed String
-		System.out.println("JsonObject.java | parse()  :  Parsing Started");
+		System.out.println("\u001B[30m\u001B[47mJsonObject.java | parse()  :  Parsing Started\u001B[0m\u001B[0m");
 		ArrayList<String> contents = new ArrayList<>();
 		BufferedReader BuffjsonReader = new BufferedReader(new FileReader(jsonFile));
 		String inputString;
 		while((inputString = BuffjsonReader.readLine()) != null) {
 			contents.add(inputString);
-			System.out.println("JsonObject.java | parse()  :  JSON file contents: " + inputString);
+			System.out.println("\u001B[32mJsonObject.java | parse()  :  JSON file contents: " + inputString + "\u001B[0m");
 		}
 		BuffjsonReader.close();
-		
+		ArrayList<String> jsonSectionAddress = new ArrayList<>();
 		//starts Line by Line, Character by Character parsing
 		ArrayList<JsonElement> ConstructRAM = new ArrayList<>();
 		ArrayList<JsonElement> SectorRam = new ArrayList<>();
 		for (int lineindex = 0; lineindex < contents.size(); lineindex++) {
 			String line = contents.get(lineindex);
 			for (int CharIndex = 0; CharIndex < line.length(); CharIndex++ ) {
-				System.out.println("JsonObject.java | parse()  :  Proccessing Char: " + line.charAt(CharIndex));
+				System.out.println("\u001B[33mJsonObject.java | parse()  :  Proccessing Char: " + line.charAt(CharIndex) + "\u001B[0m");
 				char character = line.charAt(CharIndex);
 				
 				//check 
+				// remember, update jsonSectionAddress to the jsonElement in SectorRam to read/write to 
+				//on a loader character, load
+				if (character == '{') {
+					
+				}
 				if (character == '\"') { //Checks for String construction
 					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
 				}
@@ -65,59 +70,45 @@ public class JsonObject {
 				}
 				character = line.charAt(CharIndex);
 				
-				if (character == ',' ) { //Checks for ',' ending
-					System.out.println("JsonObject.java | parse()  :  Constructed JsonElement Object: " + construct(ConstructRAM, line, CharIndex).getTagValue());
+				if (character == ',' ) {
+					System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + construct(ConstructRAM, line, CharIndex).getTagValue() + "\u001B[0m");
 					ConstructRAM.clear();
 				}
 			}
 		}
 	}
-	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) {
+	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS
 		System.out.println("JsonObject.java | (hidden) construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex)  :  Constructing Object From RAM");
-		for (int backTrack = 0; backTrack < CharIndex; backTrack++) {
-			if (Character.isWhitespace(line.charAt(CharIndex - backTrack)) == false) {
-				switch (line.charAt(CharIndex - backTrack)) {
-				case ']':
-					//Array Code
-					break;
-				case '}':
-					//Section Code
-					break;
-				default:
-					//is either String, number, or boolean
-					switch (ConstructInfo.get(ConstructInfo.size() - 1).ElementType) {
-					case Str :
-						if (ConstructInfo.size() != 1 ) {
-							JsonElement strl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).strValue);
-							return strl;
-						} else {
-							JsonElement strl = new JsonElement(JsonElement.type.Str);
-							strl.strValue = ConstructInfo.get(0).strValue;
-							return strl;
-						}
-					case Num :
-						if (ConstructInfo.size() != 1 ) {
-							JsonElement numl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).numValue);
-							return numl;
-						} else {
-							JsonElement numl = new JsonElement(JsonElement.type.Num);
-							numl.numValue = ConstructInfo.get(0).numValue;
-							return numl;
-						}
-					case Bool :
-						if (ConstructInfo.size() != 1 ) {
-							JsonElement bool = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).boolValue);
-							return bool;
-						} else {
-							JsonElement bool = new JsonElement(JsonElement.type.Bool);
-							bool.boolValue = ConstructInfo.get(0).boolValue;
-							return bool;
-						}
-					default:
-						System.out.println("CHAR_TYPE_OUT_OF_REACH");
-					}
-				}
+		switch (ConstructInfo.get(ConstructInfo.size() - 1).ElementType) {
+		case Str :
+			if (ConstructInfo.size() != 1 ) {
+				JsonElement strl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).strValue);
+				return strl;
+			} else {
+				JsonElement strl = new JsonElement(JsonElement.type.Str);
+				strl.strValue = ConstructInfo.get(0).strValue;
+				return strl;
 			}
+		case Num :
+			if (ConstructInfo.size() != 1 ) {
+				JsonElement numl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).numValue);
+				return numl;
+			} else {
+				JsonElement numl = new JsonElement(JsonElement.type.Num);
+				numl.numValue = ConstructInfo.get(0).numValue;
+				return numl;
+			}
+		case Bool :
+			if (ConstructInfo.size() != 1 ) {
+				JsonElement bool = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).boolValue);
+				return bool;
+			} else {
+				JsonElement bool = new JsonElement(JsonElement.type.Bool);
+				bool.boolValue = ConstructInfo.get(0).boolValue;
+				return bool;
+			}
+		default:
+			System.out.println("CHAR_TYPE_OUT_OF_REACH");
 		}
 		return new JsonElement("PLACEHOLDER", 19491001);
 	}
@@ -128,7 +119,7 @@ public class JsonObject {
 		
 	}
 	private int[] booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex) {
-		System.out.println("JsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading Boolean at: " + StartCharIndex + "of: " + line);
+		System.out.println("\u001B[34mJsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading Boolean at: " + StartCharIndex + "of: " + line + "\u001B[0m");
 		boolean bool = false;
 		for (int charoffset = 0; charoffset < line.length() - 1; charoffset++) {
 			try {
@@ -150,7 +141,7 @@ public class JsonObject {
 				boole.boolValue = bool;
 				loadto.add(boole);
 				int[] returnarray = {charoffset + 1 + StartCharIndex, LINE_NOT_REQUIRED};
-				System.out.println("JsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loaded Boolean: " + bool);
+				System.out.println("\u001B[34mJsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loaded Boolean: " + bool + "\u001B[0m");
 				return returnarray;
 			}
 			if (Character.isWhitespace(line.charAt(StartCharIndex + 1 + charoffset)) == true || parseEnd.contains(line.charAt(StartCharIndex + 1 + charoffset))) {
@@ -169,7 +160,7 @@ public class JsonObject {
 				boole.boolValue = bool;
 				loadto.add(boole);
 				int[] returnarray = {charoffset + 1 + StartCharIndex, LINE_NOT_REQUIRED};
-				System.out.println("JsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loaded Boolean: " + bool);
+				System.out.println("\u001B[33mJsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loaded Boolean: " + bool + "\u001B[0m");
 				return returnarray;
 			}
 		}
@@ -178,16 +169,16 @@ public class JsonObject {
 		
 	}
 	private int[] numberLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex) {
-		System.out.println("JsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading Number at: " + StartCharIndex + "of: " + line);
+		System.out.println("\u001B[34mJsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading Number at: " + StartCharIndex + "of: " + line + "\u001B[0m");
 		float number = -19491001;
 		for (int charoffset = 0; charoffset < line.length() - 1; charoffset++ ) {
 			try {
 				line.charAt(StartCharIndex + 1 + charoffset);
 			} catch (Exception e) {
-				System.out.println("JsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartChar Index  :  Reached End Of Line. Starting from last Char");
+				System.out.println("\u001B[34mJsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartChar Index  :  Reached End Of Line. Starting from last Char\u001B[0m");
 				charoffset = charoffset - 1;
 				number = Float.parseFloat(line.substring(StartCharIndex, StartCharIndex + charoffset + 2));
-				System.out.println("JsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartChar Index  :  Loaded Number: " + number);
+				System.out.println("\u001B[34mJsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartChar Index  :  Loaded Number: " + number + "\u001B[0m");
 				JsonElement added = new JsonElement(JsonElement.type.Num);
 				added.numValue = number;
 				loadto.add(added); 
@@ -196,7 +187,7 @@ public class JsonObject {
 			}
 			if (Character.isDigit(line.charAt(StartCharIndex + 1 + charoffset)) == false && line.charAt(StartCharIndex + 1 + charoffset) != '.') {
 				number = Float.parseFloat(line.substring(StartCharIndex, StartCharIndex + charoffset + 1));
-				System.out.println("JsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartChar Index  :  Loaded Number: " + number);
+				System.out.println("\u001B[34mJsonObject.java | (hidden) numberLoad(ArrayList<JsonElement> loadto, String line, int StartChar Index  :  Loaded Number: " + number + "\u001B[0m");
 				JsonElement added = new JsonElement(JsonElement.type.Num);
 				added.numValue = number;
 				loadto.add(added); 
@@ -208,7 +199,7 @@ public class JsonObject {
 		return a;
 	}
 	private int[] stringLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex) {
-		System.out.println("JsonObject.java | (hidden) stringLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading string at: " + StartCharIndex + " of: " + line);
+		System.out.println("\u001B[34mJsonObject.java | (hidden) stringLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading string at: " + StartCharIndex + " of: " + line + "\u001B[0m");
 		String str = "";
 		for (int charoffset = 0; charoffset < line.length() - 1; charoffset++ ) {
 			if (line.charAt(StartCharIndex + 1 + charoffset) != '"') {
@@ -222,7 +213,7 @@ public class JsonObject {
 				JsonElement added = new JsonElement(JsonElement.type.Str);
 				added.strValue = str;
 				loadto.add(added);
-				System.out.println("JsonObject.java | (hidden) stringLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  String Loaded: " + str);
+				System.out.println("\u001B[34mJsonObject.java | (hidden) stringLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  String Loaded: " + str + "\u001B[0m");
 				int[] returnarray = {charoffset + 1 + StartCharIndex, LINE_NOT_REQUIRED};
 				return returnarray;
 			}
