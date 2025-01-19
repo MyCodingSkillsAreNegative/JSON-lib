@@ -68,6 +68,20 @@ public class JsonObject {
 						jsonSectionAddress.add(section.Name);
 					}
 				}
+				if (Character.isDigit(character)) {
+					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
+				}
+				character = line.charAt(CharIndex);
+				if (character == '\"') { //Checks for String construction
+					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
+				}
+				character = line.charAt(CharIndex);
+				if (character == 't' || character == 'f') {
+					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
+				}
+				character = line.charAt(CharIndex);
+				
+				
 				if (character == '}') {
 					if (ConstructRAM.size() != 0) {
 						JsonElement element = construct(ConstructRAM, line, CharIndex);
@@ -75,22 +89,8 @@ public class JsonObject {
 						director(element, jsonSectionAddress);
 						ConstructRAM.clear();
 					}
-					jsonSectionAddress.remove(jsonSectionAddress.size() - 1); //fix
+					jsonSectionAddress.remove(jsonSectionAddress.size() - 1);
 				}
-				if (character == '\"') { //Checks for String construction
-					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
-				}
-				character = line.charAt(CharIndex);
-				
-				if (Character.isDigit(character)) {
-					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
-				}
-				character = line.charAt(CharIndex);
-				
-				if (character == 't' || character == 'f') {
-					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
-				}
-				character = line.charAt(CharIndex);
 				
 				if (character == ',' ) {
 					JsonElement element = construct(ConstructRAM, line, CharIndex);
