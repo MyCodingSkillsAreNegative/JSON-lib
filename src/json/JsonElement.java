@@ -95,19 +95,62 @@ public class JsonElement {
 			return strtag;
 		case Num:
 			if (this.checkAnonymous()) {
-				return "\"" + this.numValue + "\"";
+				return this.numValue + "";
 			}
-			String numtag = "\"" + this.Name + "\":\"" + this.numValue + "\"";
+			String numtag = "\"" + this.Name + "\":" + this.numValue;
 			return numtag;
 		case Bool:
 			if (this.checkAnonymous()) {
-				return "\"" + this.boolValue + "\"";
+				return this.boolValue + "";
 			}
-			String booltag = "\"" + this.Name + "\":\"" + this.boolValue + "\"";
+			String booltag = "\"" + this.Name + "\":" + this.boolValue;
 			return booltag;
+		case Sec:
+			String sectag = "";
+			sectag = "\"" + this.Name + "\":{" + this.strOfContents() + "}";
+			return sectag;
 		default:
 			System.out.println("JsonElement.java | getTagValue()  :  This is only a testing function as of now. Doesn't support container elements");
 			return "A";
 		}
+	}
+	private String strOfContents() {
+		String returned  = "";
+		for (JsonElement i : this.secValue) {
+			returned = returned + i.getTagValue() + ",";
+		}
+		returned = returned.substring(0, returned.length() - 1);
+		return returned;
+	}
+	public JsonElement deepSearch(String...location) {
+		JsonElement parent = this;
+		for (int i  = 0; i < location.length; i++) {
+			parent = parent.surfaceSearch(location[0]);
+		}
+		return parent;
+	}
+	public JsonElement deepSearch(ArrayList<String> a) {
+		JsonElement parent = this;
+		for (int i  = 0; i < a.size(); i++) {
+			parent = parent.surfaceSearch(a.get(i));
+		}
+		return parent;
+	}
+	public JsonElement surfaceSearch(String surfaceIDTag) {
+		System.out.println("SurfaceID TAG" + surfaceIDTag);
+		if (surfaceIDTag == this.Name) {
+			return this;
+		}
+		for (JsonElement i : this.secValue) {
+			System.out.println("NAME: "  + i.Name);
+			if (i.Name == surfaceIDTag) {
+				return i;
+			}
+		}
+		return new JsonElement("NOT FOUND", "NOT FOUND");
+	}
+	public String contentAsString() {
+		String returned = "";
+		return returned;
 	}
 }

@@ -23,10 +23,14 @@ public class JsonObject {
 	public static final int STRING_LINE_INDEFINITE = -2;
 	File jsonFile;
 	String jsonFilePath;
-	public JsonElement parsedJson;
+	public JsonElement parsedJson = new JsonElement("19491001","jianguo");
 	public JsonObject(String path) {
 		jsonFilePath = path;
 		jsonFile = new File(path);
+	}
+	public JsonObject(File jsonObjectFile) {
+		jsonFile = jsonObjectFile;
+		jsonFilePath = jsonObjectFile.getPath();
 	}
 	public void parse() throws IOException {
 		//retrieving parsed String
@@ -42,7 +46,6 @@ public class JsonObject {
 		ArrayList<String> jsonSectionAddress = new ArrayList<>();
 		//starts Line by Line, Character by Character parsing
 		ArrayList<JsonElement> ConstructRAM = new ArrayList<>();
-		ArrayList<JsonElement> SectorRam = new ArrayList<>();
 		for (int lineindex = 0; lineindex < contents.size(); lineindex++) {
 			String line = contents.get(lineindex);
 			for (int CharIndex = 0; CharIndex < line.length(); CharIndex++ ) {
@@ -53,70 +56,98 @@ public class JsonObject {
 				// remember, update jsonSectionAddress to the jsonElement in SectorRam to read/write to 
 				//on a loader character, load
 				if (character == '{') {
-					
+					try {
+						System.out.println(ConstructRAM.get(0).strValue);
+						JsonElement section = new JsonElement(ConstructRAM.get(0).strValue, JsonElement.type.Sec);
+						director(section, jsonSectionAddress);
+						jsonSectionAddress.add(section.Name);
+						ConstructRAM.clear();
+					} catch (Exception e) {
+						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
+						parsedJson = section;
+						jsonSectionAddress.add(section.Name);
+					}
 				}
-				if (character == '\"') { //Checks for String construction
-					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
-				}
-				character = line.charAt(CharIndex);
-				
 				if (Character.isDigit(character)) {
 					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
 				}
 				character = line.charAt(CharIndex);
-				
+				if (character == '\"') { //Checks for String construction
+					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
+				}
+				character = line.charAt(CharIndex);
 				if (character == 't' || character == 'f') {
 					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
 				}
 				character = line.charAt(CharIndex);
 				
+				
+				if (character == '}') {
+					if (ConstructRAM.size() != 0) {
+						JsonElement element = construct(ConstructRAM, line, CharIndex);
+						System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + element.getTagValue() + "\u001B[0m");
+						director(element, jsonSectionAddress);
+						ConstructRAM.clear();
+					}
+					jsonSectionAddress.remove(jsonSectionAddress.size() - 1);
+				}
+				
 				if (character == ',' ) {
-					System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + construct(ConstructRAM, line, CharIndex).getTagValue() + "\u001B[0m");
+					JsonElement element = construct(ConstructRAM, line, CharIndex);
+					System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + element.getTagValue() + "\u001B[0m");
+					director(element, jsonSectionAddress);
 					ConstructRAM.clear();
 				}
 			}
 		}
 	}
-	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS
-		System.out.println("JsonObject.java | (hidden) construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex)  :  Constructing Object From RAM");
-		switch (ConstructInfo.get(ConstructInfo.size() - 1).ElementType) {
-		case Str :
-			if (ConstructInfo.size() != 1 ) {
-				JsonElement strl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).strValue);
-				return strl;
-			} else {
-				JsonElement strl = new JsonElement(JsonElement.type.Str);
-				strl.strValue = ConstructInfo.get(0).strValue;
-				return strl;
-			}
-		case Num :
-			if (ConstructInfo.size() != 1 ) {
-				JsonElement numl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).numValue);
-				return numl;
-			} else {
-				JsonElement numl = new JsonElement(JsonElement.type.Num);
-				numl.numValue = ConstructInfo.get(0).numValue;
-				return numl;
-			}
-		case Bool :
-			if (ConstructInfo.size() != 1 ) {
-				JsonElement bool = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).boolValue);
-				return bool;
-			} else {
-				JsonElement bool = new JsonElement(JsonElement.type.Bool);
-				bool.boolValue = ConstructInfo.get(0).boolValue;
-				return bool;
-			}
-		default:
-			System.out.println("CHAR_TYPE_OUT_OF_REACH");
+	private void director(JsonElement directed, ArrayList<String> address) {
+		//section code
+		System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + address);
+		if (directed.Name != "PLACEHOLDER - ZTAMCJWGRQ" && directed.numValue != 19491001) {
+			System.out.println(directed.Name);
+			parsedJson.deepSearch(address).secValue.add(directed);
 		}
-		return new JsonElement("PLACEHOLDER", 19491001);
 	}
-	private int[] arrayLoad() {
-		
-	}
-	private int[] sectionLoad() {
-		
+	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS
+		try {
+			System.out.println("JsonObject.java | (hidden) construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex)  :  Constructing Object From RAM");
+			switch (ConstructInfo.get(ConstructInfo.size() - 1).ElementType) {
+			case Str :
+				if (ConstructInfo.size() != 1 ) {
+					JsonElement strl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).strValue);
+					return strl;
+				} else {
+					JsonElement strl = new JsonElement(JsonElement.type.Str);
+					strl.strValue = ConstructInfo.get(0).strValue;
+					return strl;
+				}
+			case Num :
+				if (ConstructInfo.size() != 1 ) {
+					JsonElement numl = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).numValue);
+					return numl;
+				} else {
+					JsonElement numl = new JsonElement(JsonElement.type.Num);
+					numl.numValue = ConstructInfo.get(0).numValue;
+					return numl;
+				}
+			case Bool :
+				if (ConstructInfo.size() != 1 ) {
+					JsonElement bool = new JsonElement(ConstructInfo.get(0).strValue, ConstructInfo.get(1).boolValue);
+					return bool;
+				} else {
+					JsonElement bool = new JsonElement(JsonElement.type.Bool);
+					bool.boolValue = ConstructInfo.get(0).boolValue;
+					return bool;
+				}
+			default:
+				System.out.println("CHAR_TYPE_OUT_OF_REACH");
+			}
+		} catch (Exception e) {
+			
+		}
+		System.out.println("CONSTRUCTOR---->>>");
+		return new JsonElement("PLACEHOLDER - ZTAMCJWGRQ", 19491001);
 	}
 	private int[] booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex) {
 		System.out.println("\u001B[34mJsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading Boolean at: " + StartCharIndex + "of: " + line + "\u001B[0m");
