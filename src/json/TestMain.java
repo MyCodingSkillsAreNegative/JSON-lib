@@ -11,6 +11,6 @@ public class TestMain {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(Character.isDigit('.'));
+		System.out.println(FOR_json.parsedJson.getTagValue());
 	}
 }
