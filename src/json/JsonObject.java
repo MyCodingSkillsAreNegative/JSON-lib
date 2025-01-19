@@ -55,7 +55,8 @@ public class JsonObject {
 				//check 
 				// remember, update jsonSectionAddress to the jsonElement in SectorRam to read/write to 
 				//on a loader character, load
-				if (character == '{') {
+				switch (character) {
+				case '{':
 					try {
 						System.out.println(ConstructRAM.get(0).strValue);
 						JsonElement section = new JsonElement(ConstructRAM.get(0).strValue, JsonElement.type.Sec);
@@ -67,22 +68,24 @@ public class JsonObject {
 						parsedJson = section;
 						jsonSectionAddress.add(section.Name);
 					}
+					break;
+				case '\"':
+					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
+					break;
+				case 't':
+					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
+					break;
+				case 'f':
+					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
+					break;
 				}
 				if (Character.isDigit(character)) {
 					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
 				}
 				character = line.charAt(CharIndex);
-				if (character == '\"') { //Checks for String construction
-					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
-				}
-				character = line.charAt(CharIndex);
-				if (character == 't' || character == 'f') {
-					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
-				}
-				character = line.charAt(CharIndex);
 				
-				
-				if (character == '}') {
+				switch (character) {
+				case '}':
 					if (ConstructRAM.size() != 0) {
 						JsonElement element = construct(ConstructRAM, line, CharIndex);
 						System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + element.getTagValue() + "\u001B[0m");
@@ -90,13 +93,13 @@ public class JsonObject {
 						ConstructRAM.clear();
 					}
 					jsonSectionAddress.remove(jsonSectionAddress.size() - 1);
-				}
-				
-				if (character == ',' ) {
+					break;
+				case ',':
 					JsonElement element = construct(ConstructRAM, line, CharIndex);
 					System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + element.getTagValue() + "\u001B[0m");
 					director(element, jsonSectionAddress);
 					ConstructRAM.clear();
+					break;
 				}
 			}
 		}
