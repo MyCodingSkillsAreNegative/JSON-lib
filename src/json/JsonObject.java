@@ -46,7 +46,6 @@ public class JsonObject {
 		ArrayList<String> jsonSectionAddress = new ArrayList<>();
 		//starts Line by Line, Character by Character parsing
 		ArrayList<JsonElement> ConstructRAM = new ArrayList<>();
-		ArrayList<JsonElement> SectorRAM = new ArrayList<>();
 		for (int lineindex = 0; lineindex < contents.size(); lineindex++) {
 			String line = contents.get(lineindex);
 			for (int CharIndex = 0; CharIndex < line.length(); CharIndex++ ) {
@@ -149,9 +148,6 @@ public class JsonObject {
 		}
 		System.out.println("CONSTRUCTOR---->>>");
 		return new JsonElement("PLACEHOLDER - ZTAMCJWGRQ", 19491001);
-	}
-	private int[] arrayLoad() {
-		
 	}
 	private int[] booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex) {
 		System.out.println("\u001B[34mJsonObject.java | (hidden) booleanLoad(ArrayList<JsonElement> loadto, String line, int StartCharIndex)  :  Loading Boolean at: " + StartCharIndex + "of: " + line + "\u001B[0m");
