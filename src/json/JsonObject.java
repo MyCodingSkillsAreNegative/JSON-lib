@@ -23,7 +23,7 @@ public class JsonObject {
 	public static final int STRING_LINE_INDEFINITE = -2;
 	File jsonFile;
 	String jsonFilePath;
-	public JsonElement parsedJson;
+	public JsonElement parsedJson = new JsonElement("19491001","jianguo");
 	public JsonObject(String path) {
 		jsonFilePath = path;
 		jsonFile = new File(path);
@@ -53,7 +53,16 @@ public class JsonObject {
 				// remember, update jsonSectionAddress to the jsonElement in SectorRam to read/write to 
 				//on a loader character, load
 				if (character == '{') {
-					
+					try {
+						JsonElement section = new JsonElement(ConstructRAM.get(0).Name, JsonElement.type.Sec);
+						jsonSectionAddress.add(ConstructRAM.get(0).Name);
+						director(section, jsonSectionAddress);
+					} catch (Exception e) {
+						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
+						jsonSectionAddress.add(section.Name);
+						parsedJson = section;
+						
+					}
 				}
 				if (character == '\"') { //Checks for String construction
 					CharIndex = stringLoad(ConstructRAM, line, CharIndex)[0];
@@ -71,11 +80,17 @@ public class JsonObject {
 				character = line.charAt(CharIndex);
 				
 				if (character == ',' ) {
-					System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + construct(ConstructRAM, line, CharIndex).getTagValue() + "\u001B[0m");
+					JsonElement element = construct(ConstructRAM, line, CharIndex);
+					System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + element.getTagValue() + "\u001B[0m");
+					director(element, jsonSectionAddress);
 					ConstructRAM.clear();
 				}
 			}
 		}
+	}
+	private void director(JsonElement directed, ArrayList<String> address) {
+		//section code
+		
 	}
 	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS
 		System.out.println("JsonObject.java | (hidden) construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex)  :  Constructing Object From RAM");
