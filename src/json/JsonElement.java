@@ -110,4 +110,26 @@ public class JsonElement {
 			return "A";
 		}
 	}
+	public JsonElement deepSearch(String...location) {
+		JsonElement parent = this;
+		for (int i  = 0; i < location.length; i++) {
+			parent = parent.surfaceSearch(location[0]);
+		}
+		return parent;
+	}
+	public JsonElement deepSearch(ArrayList<String> a) {
+		JsonElement parent = this;
+		for (int i  = 0; i < a.size(); i++) {
+			parent = parent.surfaceSearch(a.get(i));
+		}
+		return parent;
+	}
+	public JsonElement surfaceSearch(String surfaceIDTag) {
+		for (JsonElement i : this.secValue) {
+			if (i.Name == surfaceIDTag) {
+				return i;
+			}
+		}
+		return new JsonElement("NOT FOUND", "NOT FOUND");
+	}
 }
