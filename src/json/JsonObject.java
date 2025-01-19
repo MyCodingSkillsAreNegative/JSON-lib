@@ -62,6 +62,7 @@ public class JsonObject {
 						JsonElement section = new JsonElement(ConstructRAM.get(0).strValue, JsonElement.type.Sec);
 						director(section, jsonSectionAddress);
 						jsonSectionAddress.add(section.Name);
+						ConstructRAM.clear();
 					} catch (Exception e) {
 						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
 						parsedJson = section;
