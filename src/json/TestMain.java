@@ -8,7 +8,8 @@ public class TestMain {
 		Scanner inputScanner = new Scanner(System.in);
 		JsonObject FOR_json = new JsonObject("src\\json\\Test.Formatted.json");
 		JsonObject UNF_json = new JsonObject("src\\json\\Test.Unformatted.json");
-		switch (inputScanner.nextLine()) {
+		String input = inputScanner.nextLine();
+		switch (input) {
 		case "FOR_json":
 			try {
 				FOR_json.parse();
@@ -21,6 +22,15 @@ public class TestMain {
 			try {
 				UNF_json.parse();
 				System.out.println(UNF_json.parsedJson.getTagValue());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		default:
+			try {
+				JsonObject customjson = new JsonObject(input);
+				customjson.parse();
+				System.out.println(customjson.parsedJson.getTagValue());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
