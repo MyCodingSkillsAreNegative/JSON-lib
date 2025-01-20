@@ -65,7 +65,12 @@ public class JsonObject {
 						ConstructRAM.clear();
 					} catch (Exception e) {
 						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
-						parsedJson = section;
+						if (parsedJson.Name.equals("19491001") || parsedJson.strValue == "jianguo") {
+							parsedJson = section;
+						} else {
+							section = new JsonElement(JsonElement.type.Sec);
+							director(section, jsonSectionAddress);
+						}
 						jsonSectionAddress.add(section.toString());
 					}
 					break;

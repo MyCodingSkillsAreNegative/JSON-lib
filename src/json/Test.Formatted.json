@@ -24,4 +24,7 @@
 	"Backslash escape":{
 		"Double Quotation":"\""
 	}
+	{
+		"Empty Section" : "MT Section"
+	}
 }

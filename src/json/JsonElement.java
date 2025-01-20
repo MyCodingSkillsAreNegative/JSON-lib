@@ -17,10 +17,7 @@ public class JsonElement {
 		Num,
 		Sec,
 		Bool,
-		ArrNum,
-		ArrStr,
-		ArrJsE,
-		ArrBool
+		Arr
 	}
 	//Element type
 	type ElementType;
@@ -67,14 +64,8 @@ public class JsonElement {
 			return secValue;
 		case Bool :
 			return boolValue;
-		case ArrNum :
-			return arrNumValue;
-		case ArrStr :
-			return arrStrValue;
-		case ArrJsE :
+		case Arr:
 			return secValue;
-		case ArrBool :
-			return arrBoolValue;
 		default : 
 			return "ERROR: UNCONFINED ENUM VALUE";
 		}
@@ -107,6 +98,9 @@ public class JsonElement {
 			String booltag = "\"" + this.Name + "\":" + this.boolValue;
 			return booltag;
 		case Sec:
+			if (this.checkAnonymous()) {
+				return "{"+this.strOfContents() + "}";
+			}
 			String sectag = "";
 			sectag = "\"" + this.Name + "\":{" + this.strOfContents() + "}";
 			return sectag;
@@ -155,11 +149,11 @@ public class JsonElement {
 			return this;
 		}
 		for (JsonElement i : this.secValue) {
+			System.out.println(i.toString() + "," + objID);
 			if (i.toString().equals(objID)) {
 				return i;
 			}
 		}
-		System.out.println(this.toString() == objID);
 		throw new NoSuchElementException();
 	}
 	public JsonElement deepIDSearch(String ...ID) {
