@@ -106,9 +106,11 @@ public class JsonObject {
 	}
 	private void director(JsonElement directed, ArrayList<String> address) {
 		//section code
-		System.out.println(parsedJson.toString());
-		System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + address);
-		parsedJson.deepIDSearch(address).secValue.add(directed);
+		if (directed.Name != "PLACEHOLDER - ZTAMCJWGRQ" && directed.numValue != 19491001) {
+			System.out.println(parsedJson.toString());
+			System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + address);
+			parsedJson.deepIDSearch(address).secValue.add(directed);
+		}
 	}
 	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS
 		try {
