@@ -151,14 +151,15 @@ public class JsonElement {
 		return new JsonElement("NOT FOUND", "NOT FOUND");
 	}
 	private JsonElement SufacefromString(String objID) {
-		if (this.toString() == objID) {
+		if (this.toString().equals(objID)) {
 			return this;
 		}
 		for (JsonElement i : this.secValue) {
-			if (i.toString() == objID) {
+			if (i.toString().equals(objID)) {
 				return i;
 			}
 		}
+		System.out.println(this.toString() == objID);
 		throw new NoSuchElementException();
 	}
 	public JsonElement deepIDSearch(String ...ID) {

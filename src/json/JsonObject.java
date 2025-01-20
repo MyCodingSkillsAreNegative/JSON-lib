@@ -61,12 +61,12 @@ public class JsonObject {
 						System.out.println(ConstructRAM.get(0).strValue);
 						JsonElement section = new JsonElement(ConstructRAM.get(0).strValue, JsonElement.type.Sec);
 						director(section, jsonSectionAddress);
-						jsonSectionAddress.add(section.Name);
+						jsonSectionAddress.add(section.toString());
 						ConstructRAM.clear();
 					} catch (Exception e) {
 						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
 						parsedJson = section;
-						jsonSectionAddress.add(section.Name);
+						jsonSectionAddress.add(section.toString());
 					}
 					break;
 				case '\"':
@@ -106,11 +106,9 @@ public class JsonObject {
 	}
 	private void director(JsonElement directed, ArrayList<String> address) {
 		//section code
+		System.out.println(parsedJson.toString());
 		System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + address);
-		if (directed.Name != "PLACEHOLDER - ZTAMCJWGRQ" && directed.numValue != 19491001) {
-			System.out.println(directed.Name);
-			parsedJson.deepSearch(address).secValue.add(directed);
-		}
+		parsedJson.deepIDSearch(address).secValue.add(directed);
 	}
 	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS
 		try {
