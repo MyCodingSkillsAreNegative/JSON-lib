@@ -1,6 +1,7 @@
 package json;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 /*
  * On GitHub
@@ -149,8 +150,29 @@ public class JsonElement {
 		}
 		return new JsonElement("NOT FOUND", "NOT FOUND");
 	}
-	public String contentAsString() {
-		String returned = "";
-		return returned;
+	private JsonElement SufacefromString(String objID) {
+		if (this.toString() == objID) {
+			return this;
+		}
+		for (JsonElement i : this.secValue) {
+			if (i.toString() == objID) {
+				return i;
+			}
+		}
+		throw new NoSuchElementException();
+	}
+	public JsonElement deepIDSearch(String ...ID) {
+		JsonElement parent = this;
+		for (int i = 0; i < ID.length; i++) {
+			parent = parent.SufacefromString(ID[i]);
+		}
+		return parent;
+	}
+	public JsonElement deepIDSearch(ArrayList<String> address) {
+		JsonElement parent = this;
+		for (int i = 0; i < address.size(); i++) {
+			parent = parent.SufacefromString(address.get(i));
+		}
+		return parent;
 	}
 }
