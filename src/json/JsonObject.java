@@ -61,12 +61,17 @@ public class JsonObject {
 						System.out.println(ConstructRAM.get(0).strValue);
 						JsonElement section = new JsonElement(ConstructRAM.get(0).strValue, JsonElement.type.Sec);
 						director(section, jsonSectionAddress);
-						jsonSectionAddress.add(section.Name);
+						jsonSectionAddress.add(section.toString());
 						ConstructRAM.clear();
 					} catch (Exception e) {
 						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
-						parsedJson = section;
-						jsonSectionAddress.add(section.Name);
+						if (parsedJson.Name.equals("19491001") || parsedJson.strValue == "jianguo") {
+							parsedJson = section;
+						} else {
+							section = new JsonElement(JsonElement.type.Sec);
+							director(section, jsonSectionAddress);
+						}
+						jsonSectionAddress.add(section.toString());
 					}
 					break;
 				case '\"':
@@ -78,8 +83,23 @@ public class JsonObject {
 				case 'f':
 					CharIndex = booleanLoad(ConstructRAM, line, CharIndex)[0];
 					break;
+				case '[':
+					try {
+						System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + jsonSectionAddress);
+						System.out.println(ConstructRAM.get(0).strValue);
+						JsonElement section = new JsonElement(ConstructRAM.get(0).strValue, JsonElement.type.Arr);
+						director(section, jsonSectionAddress);
+						jsonSectionAddress.add(section.toString());
+						ConstructRAM.clear();
+					} catch (Exception e) {
+						JsonElement section = new JsonElement(JsonElement.type.Arr);
+						director(section, jsonSectionAddress);
+						jsonSectionAddress.add(section.toString());
+					}
+					System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + jsonSectionAddress);
+					break;
 				}
-				if (Character.isDigit(character)) {
+				if (Character.isDigit(character) || character == '-') {
 					CharIndex = numberLoad(ConstructRAM, line, CharIndex)[0];
 				}
 				character = line.charAt(CharIndex);
@@ -100,16 +120,25 @@ public class JsonObject {
 					director(element, jsonSectionAddress);
 					ConstructRAM.clear();
 					break;
+				case ']':
+					if (ConstructRAM.size() != 0) {
+						JsonElement arr = construct(ConstructRAM, line, CharIndex);
+						System.out.println("\u001B[34mJsonObject.java | parse()  :  Constructed JsonElement Object: " + arr.getTagValue() + "\u001B[0m");
+						director(arr, jsonSectionAddress);
+						ConstructRAM.clear();
+					}
+					jsonSectionAddress.remove(jsonSectionAddress.size() - 1);
+					break;
 				}
 			}
 		}
 	}
 	private void director(JsonElement directed, ArrayList<String> address) {
 		//section code
-		System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + address);
 		if (directed.Name != "PLACEHOLDER - ZTAMCJWGRQ" && directed.numValue != 19491001) {
-			System.out.println(directed.Name);
-			parsedJson.deepSearch(address).secValue.add(directed);
+			System.out.println(directed.toString());
+			System.out.println("JsonObject.java | (hidden) director(JsonElement directed, ArrayList<String> address)  :  Address: " + address);
+			parsedJson.deepIDSearch(address).secValue.add(directed);
 		}
 	}
 	private JsonElement construct(ArrayList<JsonElement> ConstructInfo, String line, int CharIndex) { // CONSTRUCTS BASIC ELEMENTS

@@ -17,10 +17,7 @@ public class JsonElement {
 		Num,
 		Sec,
 		Bool,
-		ArrNum,
-		ArrStr,
-		ArrJsE,
-		ArrBool
+		Arr
 	}
 	//Element type
 	type ElementType;
@@ -30,10 +27,7 @@ public class JsonElement {
 	String strValue;
 	float numValue;
 	boolean boolValue;
-	ArrayList<JsonElement> secValue = new ArrayList<JsonElement>(); //also for ArrArr
-	ArrayList<Boolean> arrBoolValue = new ArrayList<>();
-	ArrayList<Float> arrNumValue = new ArrayList<>();
-	ArrayList<String> arrStrValue = new ArrayList<>();
+	ArrayList<JsonElement> secValue = new ArrayList<JsonElement>(); //also for Arr
 	public JsonElement(String name, String val) {
 		Name = name;
 		strValue = val;
@@ -67,14 +61,8 @@ public class JsonElement {
 			return secValue;
 		case Bool :
 			return boolValue;
-		case ArrNum :
-			return arrNumValue;
-		case ArrStr :
-			return arrStrValue;
-		case ArrJsE :
+		case Arr:
 			return secValue;
-		case ArrBool :
-			return arrBoolValue;
 		default : 
 			return "ERROR: UNCONFINED ENUM VALUE";
 		}
@@ -107,9 +95,19 @@ public class JsonElement {
 			String booltag = "\"" + this.Name + "\":" + this.boolValue;
 			return booltag;
 		case Sec:
+			if (this.checkAnonymous()) {
+				return "{"+this.strOfContents() + "}";
+			}
 			String sectag = "";
 			sectag = "\"" + this.Name + "\":{" + this.strOfContents() + "}";
 			return sectag;
+		case Arr:
+			if (this.checkAnonymous()) {
+				return "["+this.strOfContents() + "]";
+			}
+			String arrtag = "";
+			arrtag = "\"" + this.Name + "\":[" + this.strOfContents() + "]";
+			return arrtag;
 		default:
 			System.out.println("JsonElement.java | getTagValue()  :  This is only a testing function as of now. Doesn't support container elements");
 			return "A";
@@ -151,11 +149,14 @@ public class JsonElement {
 		return new JsonElement("NOT FOUND", "NOT FOUND");
 	}
 	private JsonElement SufacefromString(String objID) {
-		if (this.toString() == objID) {
+		System.out.println(this.secValue.size());
+		if (this.toString().equals(objID)) {
 			return this;
 		}
 		for (JsonElement i : this.secValue) {
-			if (i.toString() == objID) {
+			System.out.println("SURFACE STRING CONT:" + i.Name + "," + i.toString());
+			if (i.toString().equals(objID)) {
+				System.out.println("RETURNED");
 				return i;
 			}
 		}
