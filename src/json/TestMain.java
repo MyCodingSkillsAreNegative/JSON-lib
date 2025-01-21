@@ -13,7 +13,7 @@ public class TestMain {
 		case "FOR_json":
 			try {
 				FOR_json.parse();
-				System.out.println(FOR_json.parsedJson.getTagValue());
+				System.out.println(FOR_json);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -21,7 +21,7 @@ public class TestMain {
 		case "UNF_json":
 			try {
 				UNF_json.parse();
-				System.out.println(UNF_json.parsedJson.getTagValue());
+				System.out.println(UNF_json);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

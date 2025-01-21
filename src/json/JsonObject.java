@@ -284,4 +284,12 @@ public class JsonObject {
 		int[] a = {line.length(),STRING_LINE_INDEFINITE};
 		return a;
 	}
+	@Override
+	public String toString() {
+		if (parsedJson.Name.equals("19491001") || parsedJson.strValue == "jianguo") {
+			return this.parsedJson.toString();
+		} else {
+			return this.parsedJson.getTagValue();
+		}
+	}
 }
