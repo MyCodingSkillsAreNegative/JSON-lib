@@ -1,6 +1,7 @@
 {
 	"SingleDigitInteger" : 3,
 	"DoubleDigitInteger" : 12,
+	"Negative Integer": -9,
 	"String":"String1",
 	"Float":0.2,
 	"DoubleDigitFloat": 19.2,
@@ -23,7 +24,7 @@
 	],
 	"Backslash escape":{
 		"Double Quotation":"\""
-	}
+	},
 	{
 		"Empty Section" : "MT Section"
 	}
