@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,27 +23,37 @@ public class JsonObject {
 	public static final int LINE_NOT_REQUIRED = -1;
 	public static final int STRING_LINE_INDEFINITE = -2;
 	File jsonFile;
-	String jsonFilePath;
+	Path jsonFilePath;
+	String[] contentOfJson;
 	public JsonElement parsedJson = new JsonElement("19491001","jianguo");
-	public JsonObject(String path) {
+	public JsonObject(Path path) {
 		jsonFilePath = path;
-		jsonFile = new File(path);
+		jsonFile = path.toFile();
 	}
 	public JsonObject(File jsonObjectFile) {
 		jsonFile = jsonObjectFile;
-		jsonFilePath = jsonObjectFile.getPath();
+		jsonFilePath = jsonObjectFile.toPath();
+	}
+	public JsonObject(String... jsons) {
+		contentOfJson = jsons;
 	}
 	public void parse() throws IOException {
 		//retrieving parsed String
 		System.out.println("\u001B[30m\u001B[47mJsonObject.java | parse()  :  Parsing Started\u001B[0m\u001B[0m");
 		ArrayList<String> contents = new ArrayList<>();
-		BufferedReader BuffjsonReader = new BufferedReader(new FileReader(jsonFile));
-		String inputString;
-		while((inputString = BuffjsonReader.readLine()) != null) {
-			contents.add(inputString);
-			System.out.println("\u001B[32mJsonObject.java | parse()  :  JSON file contents: " + inputString + "\u001B[0m");
+		try {
+			BufferedReader BuffjsonReader = new BufferedReader(new FileReader(jsonFile));
+			String inputString;
+			while((inputString = BuffjsonReader.readLine()) != null) {
+				contents.add(inputString);
+				System.out.println("\u001B[32mJsonObject.java | parse()  :  JSON file contents: " + inputString + "\u001B[0m");
+			}
+			BuffjsonReader.close();
+		} catch (Exception e) {
+			for (String i : contentOfJson) {
+				contents.add(i);
+			}
 		}
-		BuffjsonReader.close();
 		ArrayList<String> jsonSectionAddress = new ArrayList<>();
 		//starts Line by Line, Character by Character parsing
 		ArrayList<JsonElement> ConstructRAM = new ArrayList<>();
@@ -64,7 +75,12 @@ public class JsonObject {
 						jsonSectionAddress.add(section.toString());
 						ConstructRAM.clear();
 					} catch (Exception e) {
-						JsonElement section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
+						JsonElement section = new JsonElement("Nameless Section", JsonElement.type.Sec);
+						try {
+						section = new JsonElement(jsonFile.getName(),JsonElement.type.Sec);
+						} catch (Exception e2) {
+							
+						}
 						if (parsedJson.Name.equals("19491001") || parsedJson.strValue == "jianguo") {
 							parsedJson = section;
 						} else {
